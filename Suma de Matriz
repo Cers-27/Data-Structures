@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//Leer la matriz
+void leerMatriz(int *M, int rows, int cols, char nombre) {
+    printf("Enter elements of matrix %c:\n", nombre);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            scanf("%d", (M + i*cols + j));
+        }
+    }
+}
+
+//Suma de matrices
+void sumarMatrices(int *A, int *B, int *C, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            *(C + i*cols + j) = *(A + i*cols + j) + *(B + i*cols + j);
+        }
+    }
+}
+
+// Imprimir la matriz
+void imprimirMatriz(int *M, int rows, int cols, char nombre) {
+    printf("Matrix %c:\n", nombre);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", *(M + i*cols + j));
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+int main() {
+    int rows, cols;
+
+    printf("Numero de filas: ");
+    scanf("%d", &rows);
+    printf("Numero de columnas: ");
+    scanf("%d", &cols);
+
+    // Reservar la memoria
+    int *A = (int*) malloc(rows * cols * sizeof(int));
+    int *B = (int*) malloc(rows * cols * sizeof(int));
+    int *C = (int*) malloc(rows * cols * sizeof(int));
+
+    if (A == NULL || B == NULL || C == NULL) {
+        printf("Asignacion de memoria fallida!\n");
+        return 1;
+    }
+
+    // Leer matrices
+    leerMatriz(A, rows, cols, 'A');
+    leerMatriz(B, rows, cols, 'B');
+
+    // Realizar la suma
+    sumarMatrices(A, B, C, rows, cols);
+
+    // Imprimir matriz resultante
+    imprimirMatriz(A, rows, cols, 'A');
+    imprimirMatriz(B, rows, cols, 'B');
+    imprimirMatriz(C, rows, cols, 'C');
+
+    // Liberar memoria
+    free(A);
+    free(B);
+    free(C);
+
+    return 0;
+}
