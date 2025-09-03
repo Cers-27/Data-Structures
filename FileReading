@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+//Total de Ventas
+float totalSale(float sales[], int n) {
+    float total = 0.0f;
+    for(int i = 0; i < n; i++){
+        total+= sales[i];
+    }
+    return total;
+}
+
+//Maximo de ventas
+float maxSale(float sales[], int n){
+    float max = sales[0];
+    for(int i = 1; i < n; i++){
+        if (sales[i] > max){
+            max = sales [i];
+        }
+    }
+    return max;
+
+}
+
+int main (){
+
+    int n;
+    printf("Cuantas ventas deseas registrar? ");
+    scanf("%d",&n);
+
+    if (n <= 0){
+        printf("Cantidad invalida.\n");
+        return 1;
+    }
+
+    //crear archivo en modo Write
+    FILE *file = fopen ("sales.txt", "w");
+    if(file == NULL){
+        perror("Error al crear el archivo");
+        return 1;
+        }
+
+
+    //Ingresar el valor de las ventas
+    for (int i = 0; i < n; i++){
+        float valor;
+        printf("Ingrese el valor de la venta %d: ", i +1);
+        scanf("%f", &valor);
+        fprintf(file, "%.2f\n", valor);
+    }
+
+    //cierro el archivo
+    fclose(file);
+
+
+    //reapertura en modo read
+    file = fopen("sales.txt", "r");
+        if(file == NULL) {
+            perror("Error al abrir el archivo en lectura");
+            return 1;
+        }
+
+
+    //reserva de memoria
+    float *sales = (float *)malloc(n * sizeof(float));
+    if (sales == NULL){
+        perror("Error al asignar memoria");
+        fclose(file);
+        return 1;
+    }
+
+
+    //lectura de ventas
+    for(int i = 0; i < n; i++){
+        fscanf(file, "%f", &sales[i]);
+    }
+
+    // max y total
+    float total = totalSale(sales, n);
+    float max = maxSale(sales, n);
+
+
+    printf("\n-- RESULTADOS --\n");
+    printf("Numero de ventas: %d\n", n);
+    printf("Total de ventas: %d\n", total);
+    printf("Venta maxima %.2f", max);
+
+    //liberar memoria y cerrar archivo
+    free(sales);
+    fclose(file);
+
+
+    return 0;
+
+
+}
