@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Funcion para poner lineas de la matriz
+void printMatrix(int **matrix, int rows, int cols) {
+    // Calcular el ancho máximo 
+    int maxNum = matrix[0][0];
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            if (matrix[i][j] > maxNum)
+                maxNum = matrix[i][j];
+
+    int width = 0;
+    while (maxNum > 0) {
+        width++;
+        maxNum /= 10;
+    }
+
+    // Imprimir las lineas de la tabla
+    for (int i = 0; i < rows; i++) {
+        // Línea superior
+        for (int j = 0; j < cols; j++) {
+            printf("+");
+            for (int k = 0; k < width + 2; k++) printf("-");
+        }
+        printf("+\n");
+
+        // Fila con números
+        for (int j = 0; j < cols; j++) {
+            printf("| %*d ", width, matrix[i][j]);
+        }
+        printf("|\n");
+    }
+
+    // Última línea inferior
+    for (int j = 0; j < cols; j++) {
+        printf("+");
+        for (int k = 0; k < width + 2; k++) printf("-");
+    }
+    printf("+\n");
+}
+
+// Funcion recorrer en espiral
+void printSpiral(int **matrix, int rows, int cols) {
+    int top = 0, bottom = rows - 1;
+    int left = 0, right = cols - 1;
+
+    while (top <= bottom && left <= right) {
+        for (int i = left; i <= right; i++) printf("%d ", matrix[top][i]);
+        top++;
+
+        for (int i = top; i <= bottom; i++) printf("%d ", matrix[i][right]);
+        right--;
+
+        if (top <= bottom) {
+            for (int i = right; i >= left; i--) printf("%d ", matrix[bottom][i]);
+            bottom--;
+        }
+
+        if (left <= right) {
+            for (int i = bottom; i >= top; i--) printf("%d ", matrix[i][left]);
+            left++;
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int rows, cols;
+
+    printf("Ingrese el número de filas: ");
+    scanf("%d", &rows);
+    printf("Ingrese el número de columnas: ");
+    scanf("%d", &cols);
+
+    // Reservar memoria 
+    int **matrix = (int **)malloc(rows * sizeof(int *));
+    for (int i = 0; i < rows; i++)
+        matrix[i] = (int *)malloc(cols * sizeof(int));
+
+    // Llenar matriz
+    printf("Ingrese los elementos de la matriz (%d x %d):\n", rows, cols);
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            scanf("%d", &matrix[i][j]);
+
+    // Imprimir matriz con linea
+    printf("\nMatriz ingresada:\n");
+    printMatrix(matrix, rows, cols);
+
+    // Imprimir en espiral
+    printf("\nRecorrido en espiral: ");
+    printSpiral(matrix, rows, cols);
+
+    // Liberar memoria
+    for (int i = 0; i < rows; i++) free(matrix[i]);
+    free(matrix);
+
+    return 0;
+/*
+
+//Impresion con solo dos prints del ejercicio 
+    printf("1  2  3  4\n"
+            "14 15 16 5\n"
+            "13 20 17 6\n"
+            "12 19 18 7\n"
+            "11 10 9  8");
+
+     printf("1  2  3  4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
+*/
+
+    return 0;
+
+}
